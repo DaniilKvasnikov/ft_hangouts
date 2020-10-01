@@ -1,5 +1,6 @@
 package com.school21.ft_hangouts
 
+import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -16,7 +17,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         settings.setOnClickListener {
-
+            val intent = Intent(this, SettingAppActivity::class.java)
+            startActivity(intent)
         }
 
         val listView : ListView = findViewById<ListView>(R.id.listView)

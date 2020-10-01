@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ft_hangouts</string>
+    <string name="back">Назад</string>
+    <string name="themes">Темы</string>
+    <string name="apptheme">Стандартная</string>
+    <string name="overlaythemelime">Лайм</string>
+    <string name="overlaythemered">Красная</string>
+    <string name="overlaythemegreen">Зеленая</string>
+    <string name="overlaythemeblue">Синяя</string>
+    <string name="languages">Выбор языка</string>
+    <string name="russian">Русский</string>
+    <string name="english">English</string>
+    <string name="userimage">КартинкаПользователя</string>
+    <string name="create">Добавить</string>
+    <string name="settings">Настройки</string>
+</resources>

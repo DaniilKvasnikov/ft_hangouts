@@ -18,10 +18,10 @@
 			android:layout_height="wrap_content">
 		<Button
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="Create"/>
+				android:layout_height="wrap_content" android:text="@string/create" tools:ignore="ButtonStyle"/>
 		<Button
 				android:id="@+id/settings"
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="Settings"/>
+				android:layout_height="wrap_content" android:text="@string/settings" tools:ignore="ButtonStyle"/>
 	</LinearLayout>
 </RelativeLayout>

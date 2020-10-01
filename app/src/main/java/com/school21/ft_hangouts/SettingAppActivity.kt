@@ -3,6 +3,7 @@ package com.school21.ft_hangouts
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -11,8 +12,10 @@ import android.widget.Button
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import java.util.*
 
 class SettingAppActivity : AppCompatActivity() {
 
@@ -22,6 +25,8 @@ class SettingAppActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        loadLocate()
 
         sharedPreferences = getSharedPreferences(
             "ThemePref",
@@ -68,6 +73,32 @@ class SettingAppActivity : AppCompatActivity() {
     }
 
     fun ChangeLanguage(view: View){
+        when(view.id){
+            R.id.Russian->{
+                setLocate("ru")
+            }
+            R.id.English->{
+                setLocate("en")
+            }
+        }
+        recreate()
+    }
 
+    private fun setLocate(language: String) {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.setLocale(locale)
+        baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
+
+        val editor = getSharedPreferences("Settings", Context.MODE_PRIVATE).edit()
+        editor.putString("My_Lang", language)
+        editor.apply()
+    }
+
+    private fun loadLocate(){
+        val sharedPreference = getSharedPreferences("Settings", Context.MODE_PRIVATE)
+        val language = sharedPreference.getString("My_Lang", "")
+        setLocate(language ?: "")
     }
 }

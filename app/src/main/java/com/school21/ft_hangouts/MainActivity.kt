@@ -20,12 +20,22 @@ class MainActivity : AppCompatActivity() {
         )
         listView.adapter = adapter
 
+        var contactList = getFoneContacts()
+        for (contect in contactList)
+            list.add(contect.name)
+    }
+
+    private fun getFoneContacts() : ArrayList<Contact>{
+        val contactList = ArrayList<Contact>()
+
         val c: Cursor? = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
         if ((c?.count ?: 0) > 0) {
-            while (c != null && c.moveToNext()){
-                list.add(c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)))
+            val nameIndex = c?.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+            while (c?.moveToNext()!!){
+                contactList.add(Contact(c.getString(nameIndex!!)))
             }
         }
         c?.close()
+        return contactList
     }
 }

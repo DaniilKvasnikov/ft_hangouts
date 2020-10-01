@@ -28,7 +28,7 @@ class SettingAppActivity : AppCompatActivity() {
             Context.MODE_PRIVATE
         )
 
-        var style = sharedPreferences.getInt(themeKey, defTheme)
+        val style = sharedPreferences.getInt(themeKey, defTheme)
         theme.applyStyle(style, true)
 
         setContentView(R.layout.activity_setting_app)
@@ -38,8 +38,6 @@ class SettingAppActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-
-        updateColor()
     }
 
     fun ChangeTheme(view: View){
@@ -69,7 +67,7 @@ class SettingAppActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun updateColor() {
+    fun ChangeLanguage(view: View){
 
     }
 }

@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">ft_hangouts</string>
+    <string name="back">Back</string>
+    <string name="themes">Themes</string>
+    <string name="apptheme">AppTheme</string>
+    <string name="overlaythemelime">OverlayThemeLime</string>
+    <string name="overlaythemered">OverlayThemeRed</string>
+    <string name="overlaythemegreen">OverlayThemeGreen</string>
+    <string name="overlaythemeblue">OverlayThemeBlue</string>
+    <string name="languages">Languages</string>
+    <string name="russian">Russian</string>
+    <string name="english">English</string>
+    <string name="userimage">UserImage</string>
 </resources>

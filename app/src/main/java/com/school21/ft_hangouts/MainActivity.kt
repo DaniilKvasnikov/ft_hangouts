@@ -1,6 +1,8 @@
 package com.school21.ft_hangouts
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -9,11 +11,23 @@ import android.widget.SimpleAdapter
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-
 class MainActivity : AppCompatActivity() {
+
+    lateinit var sharedPreferences: SharedPreferences
+    val themeKey = "currentTheme"
+    val defTheme = R.style.AppTheme
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        sharedPreferences = getSharedPreferences(
+            "ThemePref",
+            Context.MODE_PRIVATE
+        )
+
+        var style = sharedPreferences.getInt(themeKey, defTheme)
+        theme.applyStyle(style, true)
+
         setContentView(R.layout.activity_main)
 
         settings.setOnClickListener {

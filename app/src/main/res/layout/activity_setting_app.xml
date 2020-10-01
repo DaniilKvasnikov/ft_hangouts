@@ -12,46 +12,11 @@
     <Space
             android:layout_width="match_parent"
             android:layout_height="10dp"/>
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <TextView
-                android:text="H: "
-                android:layout_width="15dp"
-                android:layout_height="wrap_content"/>
-        <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/color_h"/>
-    </LinearLayout>
-    <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp"/>
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <TextView
-                android:text="S: "
-                android:layout_width="15dp"
-                android:layout_height="wrap_content"/>
-        <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/color_s"/>
-    </LinearLayout>
-    <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp"/>
-    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <TextView
-                android:text="V: "
-                android:layout_width="15dp"
-                android:layout_height="wrap_content"/>
-        <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:id="@+id/color_v"/>
-    </LinearLayout>
+<RadioGroup android:layout_width="match_parent" android:layout_height="wrap_content">
+    <Button android:id="@+id/AppTheme" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="AppTheme" android:onClick="ChangeTheme"/>
+    <Button android:id="@+id/OverlayThemeLime" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="OverlayThemeLime" android:onClick="ChangeTheme"/>
+    <Button android:id="@+id/OverlayThemeRed" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="OverlayThemeRed" android:onClick="ChangeTheme"/>
+    <Button android:id="@+id/OverlayThemeGreen" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="OverlayThemeGreen" android:onClick="ChangeTheme"/>
+    <Button android:id="@+id/OverlayThemeBlue" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="OverlayThemeBlue" android:onClick="ChangeTheme"/>
+</RadioGroup>
 </LinearLayout>

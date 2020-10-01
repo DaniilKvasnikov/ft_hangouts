@@ -1,4 +1,4 @@
 package com.school21.ft_hangouts
 
-class Contact(var name: String) {
+class Contact(var name: String, var id: String) {
 }

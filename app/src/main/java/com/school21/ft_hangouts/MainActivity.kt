@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.widget.ListView
 import android.widget.SimpleAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    var timeSec: Long = 0
     lateinit var sharedPreferences: SharedPreferences
     val themeKey = "currentTheme"
     val defTheme = R.style.AppTheme
@@ -25,7 +27,7 @@ class MainActivity : AppCompatActivity() {
             Context.MODE_PRIVATE
         )
 
-        var style = sharedPreferences.getInt(themeKey, defTheme)
+        val style = sharedPreferences.getInt(themeKey, defTheme)
         theme.applyStyle(style, true)
 
         setContentView(R.layout.activity_main)
@@ -41,8 +43,8 @@ class MainActivity : AppCompatActivity() {
         val adapter = SimpleAdapter(this, listHash, R.layout.list_item, arrayOf<String>("Name", "Phone", "Image"), intArrayOf(R.id.text1, R.id.text2, R.id.image))
         listView.adapter = adapter
 
-        var contactList = getContacts()
-        var phoneList = getPhones()
+        val contactList = getContacts()
+        val phoneList = getPhones()
         for (contact in contactList){
             val newElem = HashMap<String, Any>()
             newElem["Name"] = contact.name
@@ -50,6 +52,19 @@ class MainActivity : AppCompatActivity() {
             newElem["Image"] = R.mipmap.ic_launcher
             listHash.add(newElem)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        timeSec = System.currentTimeMillis() / 1000
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val timeText = findViewById<TextView>(R.id.time)
+        val deltaTime = System.currentTimeMillis() / 1000 - timeSec
+        if (timeSec != 0L)
+            timeText.text = "time = $deltaTime sec"
     }
 
     private fun getContacts() : ArrayList<Contact>{
@@ -71,10 +86,10 @@ class MainActivity : AppCompatActivity() {
         val contactList = HashMap<String, ArrayList<String>>()
 
         val c: Cursor? = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null)
-        if ((c?.count ?: 0) > 0) {
-            val idIndex = c!!.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
-            val phoneIndex = c!!.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-            while (c?.moveToNext()!!){
+        if (c != null && c.count > 0) {
+            val idIndex = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
+            val phoneIndex = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+            while (c.moveToNext()){
                 val contactID = c.getString(idIndex)
                 val contactPhone : String = c.getString(phoneIndex)
                 if (!contactList.containsKey(contactID))

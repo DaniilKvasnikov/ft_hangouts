@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import android.widget.TextView
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         AddContact.setOnClickListener {
-            val intent = Intent(this, SettingAppActivity::class.java)
+            val intent = Intent(this, AddNewContactActivity::class.java)
             startActivity(intent)
         }
 
@@ -48,6 +49,11 @@ class MainActivity : AppCompatActivity() {
         val adapter = SimpleAdapter(this, listHash, R.layout.list_item, arrayOf<String>("Name", "Phone", "Image"), intArrayOf(R.id.text1, R.id.text2, R.id.image))
         listView.adapter = adapter
 
+        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            val item = parent.getItemAtPosition(position) as HashMap<String, String>
+            val intent = Intent(this, ContactInfoActivity::class.java)
+            startActivity(intent)
+        }
         val contactList = getContacts()
         val phoneList = getPhones()
         for (contact in contactList){

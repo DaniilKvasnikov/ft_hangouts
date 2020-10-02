@@ -7,6 +7,8 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.SeekBar
@@ -37,11 +39,25 @@ class SettingAppActivity : AppCompatActivity() {
         theme.applyStyle(style, true)
 
         setContentView(R.layout.activity_setting_app)
+    }
 
-        val buttonBack = findViewById<Button>(R.id.Back)
-        buttonBack.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.settings_menu, menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.back->{
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else->{
+                super.onOptionsItemSelected(item)
+            }
         }
     }
 

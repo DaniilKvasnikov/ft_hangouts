@@ -6,16 +6,14 @@ import android.content.SharedPreferences
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.widget.AdapterView
-import android.widget.ListView
-import android.widget.SimpleAdapter
-import android.widget.TextView
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    var timeSec: Long = 0
     lateinit var sharedPreferences: SharedPreferences
     val themeKey = "currentTheme"
     val defTheme = R.style.AppTheme
@@ -23,27 +21,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedPreferences = getSharedPreferences(
-            "ThemePref",
-            Context.MODE_PRIVATE
-        )
-
+        sharedPreferences = getSharedPreferences("ThemePref",Context.MODE_PRIVATE)
         val style = sharedPreferences.getInt(themeKey, defTheme)
         theme.applyStyle(style, true)
 
         setContentView(R.layout.activity_main)
 
-        settings.setOnClickListener {
-            val intent = Intent(this, SettingAppActivity::class.java)
-            startActivity(intent)
-        }
-
-        AddContact.setOnClickListener {
-            val intent = Intent(this, AddNewContactActivity::class.java)
-            startActivity(intent)
-        }
-
-        val listView : ListView = findViewById<ListView>(R.id.listView)
+        val listView : ListView = findViewById(R.id.listView)
 
         val listHash = ArrayList<HashMap<String, Any>>()
         val adapter = SimpleAdapter(this, listHash, R.layout.list_item, arrayOf<String>("Name", "Phone", "Image"), intArrayOf(R.id.text1, R.id.text2, R.id.image))
@@ -65,17 +49,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        timeSec = System.currentTimeMillis() / 1000
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+
+        return true
     }
 
-    override fun onResume() {
-        super.onResume()
-        val timeText = findViewById<TextView>(R.id.time)
-        val deltaTime = System.currentTimeMillis() / 1000L - timeSec
-        if (timeSec != 0L)
-            timeText.text = "$deltaTime sec on pause"
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.add->{
+                val intent = Intent(this, AddNewContactActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.settings->{
+                val intent = Intent(this, SettingAppActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else->{
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     private fun getContacts() : ArrayList<Contact>{

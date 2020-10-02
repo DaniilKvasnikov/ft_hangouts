@@ -37,6 +37,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        AddContact.setOnClickListener {
+            val intent = Intent(this, SettingAppActivity::class.java)
+            startActivity(intent)
+        }
+
         val listView : ListView = findViewById<ListView>(R.id.listView)
 
         val listHash = ArrayList<HashMap<String, Any>>()
@@ -62,9 +67,9 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val timeText = findViewById<TextView>(R.id.time)
-        val deltaTime = System.currentTimeMillis() / 1000 - timeSec
+        val deltaTime = System.currentTimeMillis() / 1000L - timeSec
         if (timeSec != 0L)
-            timeText.text = "time = $deltaTime sec"
+            timeText.text = "$deltaTime sec on pause"
     }
 
     private fun getContacts() : ArrayList<Contact>{

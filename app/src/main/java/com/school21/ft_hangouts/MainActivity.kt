@@ -23,22 +23,18 @@ class MainActivity : AppCompatActivity() {
     val themeKey = "currentTheme"
     val defTheme = R.style.AppTheme
 
-    private val TAG = "PermissionDemo"
     private val RECORD_REQUEST_CODE = 101
     private fun setupPermissions(): Boolean {
         val permission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_CONTACTS)
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "Permission to record denied")
+        return if (permission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.READ_CONTACTS),
                     RECORD_REQUEST_CODE)
-            return false
-        }
-        else{
-            Log.i(TAG, "Permission to record dont denied")
-            return true
+            false
+        } else{
+            true
         }
     }
 

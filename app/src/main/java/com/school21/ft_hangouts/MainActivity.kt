@@ -1,5 +1,6 @@
 package com.school21.ft_hangouts
 
+import DataBaseHandler
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -18,6 +19,8 @@ import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var db: DataBaseHandler
 
     lateinit var sharedPreferences: SharedPreferences
     val themeKey = "currentTheme"
@@ -40,6 +43,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        dataBaseCreate()
 
         if (!setupPermissions()) return
 
@@ -69,6 +74,29 @@ class MainActivity : AppCompatActivity() {
             newElem["Image"] = R.mipmap.ic_launcher
             listHash.add(newElem)
         }
+    }
+
+    private fun addUser(user : User){
+        db.insertData(user)
+    }
+
+    private val TAG = "PermissionDemo"
+    private fun getUsers()
+    {
+        val data = db.readData()
+        for (i in 0 until data.size) {
+            var id = data[i].id.toString()
+            var name = data[i].name
+            var age = data[i].age
+            Log.i(TAG, "$i read $id $name $age")
+        }
+    }
+
+    private fun dataBaseCreate() {
+        val context = this
+        db = DataBaseHandler(context)
+//        addUser(User("Jojo", 22))
+        getUsers()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

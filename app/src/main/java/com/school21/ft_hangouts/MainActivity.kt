@@ -1,15 +1,20 @@
 package com.school21.ft_hangouts
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -18,8 +23,29 @@ class MainActivity : AppCompatActivity() {
     val themeKey = "currentTheme"
     val defTheme = R.style.AppTheme
 
+    private val TAG = "PermissionDemo"
+    private val RECORD_REQUEST_CODE = 101
+    private fun setupPermissions(): Boolean {
+        val permission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CONTACTS)
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "Permission to record denied")
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.READ_CONTACTS),
+                    RECORD_REQUEST_CODE)
+            return false
+        }
+        else{
+            Log.i(TAG, "Permission to record dont denied")
+            return true
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!setupPermissions()) return
 
         sharedPreferences = getSharedPreferences("ThemePref",Context.MODE_PRIVATE)
         val style = sharedPreferences.getInt(themeKey, defTheme)

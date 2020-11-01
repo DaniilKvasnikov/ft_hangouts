@@ -1,5 +1,6 @@
 package com.school21.ft_hangouts
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,13 +10,14 @@ import kotlinx.android.synthetic.main.activity_add_new_contact.back
 import kotlinx.android.synthetic.main.activity_contact_info.*
 import java.io.Serializable
 
-class ContactInfoActivity : AppCompatActivity() {
+class ContactInfoActivity : MainActivity() {
 
     private lateinit var db: DataBaseHandler
     private var id: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        theme.applyStyle(getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE).getInt(ThemesInfo.themeKey, ThemesInfo.defTheme), true)
         setContentView(R.layout.activity_contact_info)
 
         val context = this

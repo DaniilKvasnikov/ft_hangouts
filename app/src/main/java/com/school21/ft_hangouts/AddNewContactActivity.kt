@@ -1,5 +1,6 @@
 package com.school21.ft_hangouts
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,24 +9,19 @@ import android.widget.EditText
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_add_new_contact.*
 
-class AddNewContactActivity : AppCompatActivity() {
+class AddNewContactActivity : MainActivity() {
 
     private lateinit var db: DataBaseHandler
 
     private val TAG = "PermissionDemo"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        theme.applyStyle(getSharedPreferences(ThemesInfo.themeKey,Context.MODE_PRIVATE).getInt(ThemesInfo.themeKey, ThemesInfo.defTheme), true)
         setContentView(R.layout.activity_add_new_contact)
 
 
         val context = this
         db = DataBaseHandler(context)
-
-        var name = findViewById<EditText>(R.id.name)
-        var surname = findViewById<EditText>(R.id.surname)
-        var phone = findViewById<EditText>(R.id.phone)
-        var organization = findViewById<EditText>(R.id.organization)
-        var email = findViewById<EditText>(R.id.email)
 
         back.setOnClickListener {
             backToMain()

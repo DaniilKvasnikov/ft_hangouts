@@ -19,25 +19,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import java.util.*
 
-class SettingAppActivity : AppCompatActivity() {
+class SettingAppActivity : MainActivity() {
 
-    lateinit var sharedPreferences: SharedPreferences
-    val themeKey = "currentTheme"
-    val defTheme = R.style.AppTheme
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        theme.applyStyle(getSharedPreferences(ThemesInfo.themeKey,Context.MODE_PRIVATE).getInt(ThemesInfo.themeKey, ThemesInfo.defTheme), true)
         loadLocate()
-
-        sharedPreferences = getSharedPreferences(
-            "ThemePref",
-            Context.MODE_PRIVATE
-        )
-
-        val style = sharedPreferences.getInt(themeKey, defTheme)
-        theme.applyStyle(style, true)
-
         setContentView(R.layout.activity_setting_app)
     }
 
@@ -62,7 +50,7 @@ class SettingAppActivity : AppCompatActivity() {
     }
 
     fun ChangeTheme(view: View){
-        var theme : Int = defTheme
+        var theme : Int = ThemesInfo.defTheme
         when(view.id) {
             R.id.AppTheme->{
                 theme = R.style.AppTheme
@@ -80,9 +68,9 @@ class SettingAppActivity : AppCompatActivity() {
                 theme = R.style.OverlayThemeBlue
             }
         }
-        sharedPreferences.edit().putInt(themeKey, theme).apply()
+        getSharedPreferences(ThemesInfo.themeKey,Context.MODE_PRIVATE).edit().putInt(ThemesInfo.themeKey, theme).apply()
 
-        val intent = intent // from getIntent()
+        val intent = intent
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         finish()
         startActivity(intent)

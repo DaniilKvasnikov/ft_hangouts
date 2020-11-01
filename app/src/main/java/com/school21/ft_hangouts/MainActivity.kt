@@ -18,18 +18,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
-class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity() {
 
+    private var currentTimestamp: Long = 0
     private lateinit var db: DataBaseHandler
 
-    lateinit var sharedPreferences: SharedPreferences
-    val themeKey = "currentTheme"
-    val defTheme = R.style.AppTheme
-    private fun setupTheme(){
-        sharedPreferences = getSharedPreferences("ThemePref",Context.MODE_PRIVATE)
-        val style = sharedPreferences.getInt(themeKey, defTheme)
-        theme.applyStyle(style, true)
-    }
 
     private val RECORD_REQUEST_CODE = 101
     private fun setupPermissions(): Boolean {
@@ -46,13 +39,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        var afterStart = currentTimestamp == 0L
+        var delta = System.currentTimeMillis()/ 1000 - currentTimestamp
+        currentTimestamp = System.currentTimeMillis() / 1000
+        if (afterStart) return
+        val myDialogFragment = MyDialogFragment()
+        myDialogFragment.delta = delta
+        val manager = supportFragmentManager
+        myDialogFragment.show(manager, "myDialog")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        currentTimestamp = System.currentTimeMillis() / 1000
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        theme.applyStyle(getSharedPreferences(ThemesInfo.themeKey,Context.MODE_PRIVATE).getInt(ThemesInfo.themeKey, ThemesInfo.defTheme), true)
         setContentView(R.layout.activity_main)
+        currentTimestamp = 0L
 
         val listView : ListView = findViewById(R.id.listView)
 
-        setupTheme()
         val users = dataBaseCreate()
         val listHash = showUsers(users)
 

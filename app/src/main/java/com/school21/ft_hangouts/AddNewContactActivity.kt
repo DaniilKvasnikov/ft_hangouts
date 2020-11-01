@@ -28,6 +28,7 @@ class AddNewContactActivity : MainActivity() {
         }
 
         createContact.setOnClickListener {
+            if (name.text.isEmpty()) return@setOnClickListener
             addNewUser()
             backToMain()
         }

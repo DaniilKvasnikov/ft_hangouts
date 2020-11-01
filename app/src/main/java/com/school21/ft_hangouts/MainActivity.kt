@@ -1,6 +1,5 @@
 package com.school21.ft_hangouts
 
-import DataBaseHandler
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -12,11 +11,12 @@ import android.provider.ContactsContract
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ListView
+import android.widget.SimpleAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +25,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var sharedPreferences: SharedPreferences
     val themeKey = "currentTheme"
     val defTheme = R.style.AppTheme
+    private fun setupTheme(){
+        sharedPreferences = getSharedPreferences("ThemePref",Context.MODE_PRIVATE)
+        val style = sharedPreferences.getInt(themeKey, defTheme)
+        theme.applyStyle(style, true)
+    }
 
     private val RECORD_REQUEST_CODE = 101
     private fun setupPermissions(): Boolean {
@@ -43,60 +48,65 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        dataBaseCreate()
-
-        if (!setupPermissions()) return
-
-        sharedPreferences = getSharedPreferences("ThemePref",Context.MODE_PRIVATE)
-        val style = sharedPreferences.getInt(themeKey, defTheme)
-        theme.applyStyle(style, true)
-
         setContentView(R.layout.activity_main)
 
         val listView : ListView = findViewById(R.id.listView)
 
-        val listHash = ArrayList<HashMap<String, Any>>()
-        val adapter = SimpleAdapter(this, listHash, R.layout.list_item, arrayOf<String>("Name", "Phone", "Image"), intArrayOf(R.id.text1, R.id.text2, R.id.image))
+        setupTheme()
+        val users = dataBaseCreate()
+        val listHash = showUsers(users)
+
+        if (setupPermissions()){
+            val contactList = getContacts()
+            val phoneList = getPhones()
+            for (contact in contactList){
+                val newElem = HashMap<String, Any>()
+                newElem["Name"] = contact.name
+                newElem["Phone"] = phoneList[contact.id]?.get(0) ?: ""
+                newElem["Image"] = R.mipmap.ic_launcher
+                listHash.add(newElem)
+            }
+        }
+
+        val adapter = SimpleAdapter(this, listHash, R.layout.list_item, arrayOf("Name", "Phone", "Image"), intArrayOf(R.id.text1, R.id.text2, R.id.image))
         listView.adapter = adapter
 
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             val item = parent.getItemAtPosition(position) as HashMap<String, String>
-            val intent = Intent(this, ContactInfoActivity::class.java)
+            var user = users[id.toInt()]
+            val intent = Intent(this, ContactInfoActivity::class.java).apply {
+                putExtra("id", user.id)
+                putExtra("name", user.name)
+                putExtra("surname", user.surname)
+                putExtra("phone", user.phone)
+                putExtra("organization", user.organization)
+                putExtra("email", user.email)
+            }
             startActivity(intent)
         }
-        val contactList = getContacts()
-        val phoneList = getPhones()
-        for (contact in contactList){
+    }
+
+    private fun getUsers(): ArrayList<User> {
+        val data = db.readData()
+        return data as ArrayList<User>
+    }
+
+    private fun showUsers(users : ArrayList<User>): ArrayList<HashMap<String, Any>>{
+        val listHash = ArrayList<HashMap<String, Any>>()
+        for(user in users){
             val newElem = HashMap<String, Any>()
-            newElem["Name"] = contact.name
-            newElem["Phone"] = phoneList[contact.id]?.get(0) ?: ""
+            newElem["Name"] = user.name
+            newElem["Phone"] = user.phone
             newElem["Image"] = R.mipmap.ic_launcher
             listHash.add(newElem)
         }
+        return listHash
     }
 
-    private fun addUser(user : User){
-        db.insertData(user)
-    }
-
-    private val TAG = "PermissionDemo"
-    private fun getUsers()
-    {
-        val data = db.readData()
-        for (i in 0 until data.size) {
-            var id = data[i].id.toString()
-            var name = data[i].name
-            var age = data[i].age
-            Log.i(TAG, "$i read $id $name $age")
-        }
-    }
-
-    private fun dataBaseCreate() {
+    private fun dataBaseCreate(): ArrayList<User> {
         val context = this
         db = DataBaseHandler(context)
-//        addUser(User("Jojo", 22))
-        getUsers()
+        return getUsers()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -131,9 +141,8 @@ class MainActivity : AppCompatActivity() {
         if ((c?.count ?: 0) > 0) {
             val nameIndex = c?.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
             val idIndex = c?.getColumnIndex(ContactsContract.Contacts._ID)
-            while (c?.moveToNext()!!){
+            while (c?.moveToNext()!!)
                 contactList.add(Contact(c.getString(nameIndex!!), c.getString(idIndex!!)))
-            }
         }
         c?.close()
         return contactList

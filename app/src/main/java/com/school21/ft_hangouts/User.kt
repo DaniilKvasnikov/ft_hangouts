@@ -1,12 +1,14 @@
 package com.school21.ft_hangouts
 
-class User() {
-    constructor(name: String, age: Int) : this(){
-        this.name = name
-        this.age = age
-    }
+class User {
+    var id = 0
+    var name : String = ""
+    var surname : String = ""
+    var phone : String = ""
+    var organization : String = ""
+    var email : String = ""
 
-    var name: String = ""
-    var age: Int = 0
-    var id: Int = 0
+    override fun toString(): String {
+        return "$id $name $phone"
+    }
 }

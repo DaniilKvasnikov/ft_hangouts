@@ -15,16 +15,47 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:text="Name"
                 android:ems="10"
-                android:id="@+id/editText" tools:layout_editor_absoluteY="16dp" tools:layout_editor_absoluteX="14dp"
+                android:id="@+id/name"
+                tools:layout_editor_absoluteY="16dp"
+                tools:layout_editor_absoluteX="14dp"
+                tools:ignore="MissingConstraints"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/surname"
+                tools:layout_editor_absoluteY="16dp"
+                tools:layout_editor_absoluteX="14dp"
                 tools:ignore="MissingConstraints"/>
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone"
                 android:ems="10"
-                android:id="@+id/editText2"/>
+                android:id="@+id/phone"
+                tools:layout_editor_absoluteY="16dp"
+                tools:layout_editor_absoluteX="14dp"
+                tools:ignore="MissingConstraints"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/organization"
+                tools:layout_editor_absoluteY="16dp"
+                tools:layout_editor_absoluteX="14dp"
+                tools:ignore="MissingConstraints"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:ems="10"
+                android:id="@+id/email"
+                tools:layout_editor_absoluteY="16dp"
+                tools:layout_editor_absoluteX="14dp"
+                tools:ignore="MissingConstraints"/>
         <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content">
             <Button
                     android:id="@+id/back"

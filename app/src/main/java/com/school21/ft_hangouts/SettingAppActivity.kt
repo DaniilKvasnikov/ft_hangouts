@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import java.util.*
 
-class SettingAppActivity : MainActivity() {
+class SettingAppActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_add_new_contact.back
 import kotlinx.android.synthetic.main.activity_contact_info.*
 import java.io.Serializable
 
-class ContactInfoActivity : MainActivity() {
+class ContactInfoActivity : AppCompatActivity() {
 
     private var emailText: EditText? = null
     private var organizationText: EditText? = null

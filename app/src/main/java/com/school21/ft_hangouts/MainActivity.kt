@@ -22,68 +22,46 @@ import androidx.core.content.ContextCompat
 
 open class MainActivity : AppCompatActivity() {
 
-    private var currentTimestamp: Long = 0
+    private lateinit var listView: ListView
+    private var currentTheme: Int = ThemesInfo.defTheme
     private lateinit var db: DataBaseHandler
 
 
-    private val RECORD_REQUEST_CODE = 101
-
-    private fun setupPermissions(): Boolean {
-        val permision= Manifest.permission.READ_CONTACTS
-        val permission = ContextCompat.checkSelfPermission(
-            this,
-            permision
-        )
-
-        return if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(permision),
-                RECORD_REQUEST_CODE
-            )
-            false
-        } else{
-            true
-        }
-    }
-
     override fun onResume() {
         super.onResume()
-        return
-        var afterStart = currentTimestamp == 0L
-        var delta = System.currentTimeMillis()/ 1000 - currentTimestamp
-        currentTimestamp = System.currentTimeMillis() / 1000
-        if (afterStart) return
+        updateUsersList()
+//        openTimeDialog()
+    }
+
+    private fun openTimeDialog() {
         val myDialogFragment = MyDialogFragment()
-        myDialogFragment.delta = delta
+        myDialogFragment.delta = 0
         val manager = supportFragmentManager
         myDialogFragment.show(manager, "myDialog")
     }
 
+    private fun themeUpdate() {
+        val newTheme = getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE)
+            .getInt(ThemesInfo.themeKey, ThemesInfo.defTheme)
+        theme.applyStyle(newTheme, true )
+    }
+
     override fun onPause() {
         super.onPause()
-        currentTimestamp = System.currentTimeMillis() / 1000
     }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        theme.applyStyle(
-            getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE).getInt(
-                ThemesInfo.themeKey,
-                ThemesInfo.defTheme
-            ), true
-        )
+        themeUpdate()
         setContentView(R.layout.activity_main)
-        currentTimestamp = 0L
 
-        val listView : ListView = findViewById(R.id.listView)
-
-        val users = dataBaseCreate()
-        val listHash = showUsers(users)
+        listView = findViewById(R.id.listView)
+        updateUsersList()
 
 
-        if (setupPermissions()){
+//        if (PermissionsManager().setupPermissions(this)){
 //            val contactList = getContacts()
 //            val phoneList = getPhones()
 //            for (contact in contactList){
@@ -93,20 +71,23 @@ open class MainActivity : AppCompatActivity() {
 //                newElem["Image"] = R.mipmap.ic_launcher
 //                listHash.add(newElem)
 //            }
-        }
+//        }
+
+    }
+
+    private fun updateUsersList() {
+        val users = dataBaseCreate()
+        val listHash = showUsers(users)
 
         val adapter = SimpleAdapter(
             this, listHash, R.layout.list_item, arrayOf("Name", "Phone", "Image"), intArrayOf(
-                R.id.text1,
-                R.id.text2,
-                R.id.image
+                R.id.text1, R.id.text2, R.id.image
             )
         )
         listView.adapter = adapter
 
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            val item = parent.getItemAtPosition(position) as HashMap<String, String>
-            var user = users[id.toInt()]
+            val user = users[id.toInt()]
             val intent = Intent(this, ContactInfoActivity::class.java).apply {
                 putExtra("id", user.id)
                 putExtra("name", user.name)

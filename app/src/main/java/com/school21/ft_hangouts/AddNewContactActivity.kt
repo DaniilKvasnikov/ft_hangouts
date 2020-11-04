@@ -8,9 +8,10 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_new_contact.*
 
-class AddNewContactActivity : MainActivity() {
+class AddNewContactActivity : AppCompatActivity() {
 
     private lateinit var db: DataBaseHandler
 
@@ -23,19 +24,17 @@ class AddNewContactActivity : MainActivity() {
 
         val context = this
         db = DataBaseHandler(context)
-
-        back.setOnClickListener {
-            backToMain()
-        }
-
-        createContact.setOnClickListener {
-            if (name.text.isEmpty()) return@setOnClickListener
-            addNewUser()
-            backToMain()
-        }
     }
 
-    private fun addNewUser() {
+    fun addNewUser(view: View) {
+        if (name.text.isEmpty()){
+            Toast.makeText(this, getString(R.string.EnterName), Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (phone.text.isEmpty()){
+            Toast.makeText(this, getString(R.string.EnterPhone), Toast.LENGTH_SHORT).show()
+            return
+        }
         val user = User()
         user.name = name.text.toString()
         user.surname = surname.text.toString()
@@ -44,9 +43,10 @@ class AddNewContactActivity : MainActivity() {
         user.email = email.text.toString()
         Log.i(TAG, "add $user")
         db.insertData(user)
+        backToMain(view)
     }
 
-    private fun backToMain() {
+    fun backToMain(view: View) {
         finish()
     }
 }

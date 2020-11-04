@@ -24,4 +24,6 @@
     <string name="phone">Телефон:</string>
     <string name="surname">Фамилия:</string>
     <string name="sendSMS">Отправить сообщение</string>
+    <string name="EnterName">Введите имя</string>
+    <string name="EnterPhone">Введите телефон</string>
 </resources>

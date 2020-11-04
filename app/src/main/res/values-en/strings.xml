@@ -24,4 +24,6 @@
     <string name="phone">Phone:</string>
     <string name="surname">Surname:</string>
     <string name="sendSMS">Send SMS</string>
+    <string name="EnterName">Enter name</string>
+    <string name="EnterPhone">Enter phone</string>
 </resources>

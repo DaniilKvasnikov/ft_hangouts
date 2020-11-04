@@ -31,4 +31,26 @@ class PermissionsManager {
             Log.i(destinationAddress, smsMessage)
         }
     }
+
+    private val RECORD_REQUEST_CODE = 101
+
+    fun setupPermissions(activity: Activity): Boolean {
+        val permision= Manifest.permission.READ_CONTACTS
+        val permission = ContextCompat.checkSelfPermission(
+            activity,
+            permision
+        )
+
+        return if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                activity,
+                arrayOf(permision),
+                RECORD_REQUEST_CODE
+            )
+            false
+        } else{
+            true
+        }
+    }
+
 }

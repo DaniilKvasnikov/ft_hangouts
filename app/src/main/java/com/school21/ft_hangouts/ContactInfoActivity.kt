@@ -2,15 +2,12 @@ package com.school21.ft_hangouts
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_add_new_contact.*
-import kotlinx.android.synthetic.main.activity_add_new_contact.back
-import kotlinx.android.synthetic.main.activity_contact_info.*
-import java.io.Serializable
+import androidx.appcompat.app.AppCompatActivity
 
 class ContactInfoActivity : AppCompatActivity() {
 
@@ -30,7 +27,12 @@ class ContactInfoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        theme.applyStyle(getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE).getInt(ThemesInfo.themeKey, ThemesInfo.defTheme), true)
+        theme.applyStyle(
+            getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE).getInt(
+                ThemesInfo.themeKey,
+                ThemesInfo.defTheme
+            ), true
+        )
         setContentView(R.layout.activity_contact_info)
 
         val context = this
@@ -69,6 +71,7 @@ class ContactInfoActivity : AppCompatActivity() {
     }
 
     fun callUser(view: View) {
+        PermissionsManager().setupPermissionsCall(this, phone.toString(), message?.text.toString());
     }
 
     fun backToMain(view: View) {

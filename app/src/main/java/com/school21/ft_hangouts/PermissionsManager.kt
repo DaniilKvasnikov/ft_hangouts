@@ -2,7 +2,9 @@ package com.school21.ft_hangouts
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.telephony.SmsManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
@@ -50,6 +52,25 @@ class PermissionsManager {
             false
         } else{
             true
+        }
+    }
+
+    fun setupPermissionsCall(activity: Activity, phone: String, name: String) {
+        val permision= Manifest.permission.CALL_PHONE
+        val permission = ContextCompat.checkSelfPermission(
+            activity,
+            permision
+        )
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                activity,
+                arrayOf(permision),
+                RECORD_REQUEST_CODE
+            )
+        } else{
+            val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phone"))
+            activity.startActivity(intent)
         }
     }
 

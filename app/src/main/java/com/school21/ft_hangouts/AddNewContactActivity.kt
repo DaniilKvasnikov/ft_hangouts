@@ -1,12 +1,12 @@
 package com.school21.ft_hangouts
 
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_new_contact.*
@@ -26,6 +26,25 @@ class AddNewContactActivity : AppCompatActivity() {
         db = DataBaseHandler(context)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.settings_menu, menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.back->{
+                finish()
+                true
+            }
+            else->{
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
     fun addNewUser(view: View) {
         if (name.text.isEmpty()){
             Toast.makeText(this, getString(R.string.EnterName), Toast.LENGTH_SHORT).show()
@@ -43,10 +62,6 @@ class AddNewContactActivity : AppCompatActivity() {
         user.email = email.text.toString()
         Log.i(TAG, "add $user")
         db.insertData(user)
-        backToMain(view)
-    }
-
-    fun backToMain(view: View) {
         finish()
     }
 }

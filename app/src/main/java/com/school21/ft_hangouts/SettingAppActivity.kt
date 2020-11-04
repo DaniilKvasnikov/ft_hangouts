@@ -48,7 +48,7 @@ class SettingAppActivity : AppCompatActivity() {
         }
     }
 
-    fun ChangeTheme(view: View){
+    fun changeTheme(view: View){
         var theme : Int = ThemesInfo.defTheme
         when(view.id) {
             R.id.AppTheme->{

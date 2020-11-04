@@ -109,11 +109,6 @@
                     android:text="@string/callUser"
                     android:onClick="callUser"/>
         </GridLayout>
-        <Button android:id="@+id/back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/back"
-                android:onClick="backToMain"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

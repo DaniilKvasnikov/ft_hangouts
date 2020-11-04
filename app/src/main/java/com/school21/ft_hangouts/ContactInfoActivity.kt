@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
@@ -56,6 +58,25 @@ class ContactInfoActivity : AppCompatActivity() {
         phoneText?.setText(phone)
         organizationText?.setText(organization)
         emailText?.setText(email)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.settings_menu, menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.back->{
+                finish()
+                true
+            }
+            else->{
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     fun sendMessage(view: View) {

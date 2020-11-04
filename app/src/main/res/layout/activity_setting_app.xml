@@ -21,35 +21,35 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/apptheme"
-                    android:onClick="ChangeTheme"
+                    android:onClick="changeTheme"
                     android:layout_marginHorizontal="20pt"/>
             <Button
                     android:id="@+id/OverlayThemeLime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/overlaythemelime"
-                    android:onClick="ChangeTheme"
+                    android:onClick="changeTheme"
                     android:layout_marginHorizontal="20pt"/>
             <Button
                     android:id="@+id/OverlayThemeRed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/overlaythemered"
-                    android:onClick="ChangeTheme"
+                    android:onClick="changeTheme"
                     android:layout_marginHorizontal="20pt"/>
             <Button
                     android:id="@+id/OverlayThemeGreen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/overlaythemegreen"
-                    android:onClick="ChangeTheme"
+                    android:onClick="changeTheme"
                     android:layout_marginHorizontal="20pt"/>
             <Button
                     android:id="@+id/OverlayThemeBlue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/overlaythemeblue"
-                    android:onClick="ChangeTheme"
+                    android:onClick="changeTheme"
                     android:layout_marginHorizontal="20pt"/>
             <Space
                     android:layout_width="match_parent"

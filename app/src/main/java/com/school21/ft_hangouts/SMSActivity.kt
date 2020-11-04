@@ -3,6 +3,8 @@ package com.school21.ft_hangouts
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -39,6 +41,25 @@ class SMSActivity : AppCompatActivity() {
 
         phoneView.text = phone
         nameView.text = name
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.settings_menu, menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.back->{
+                finish()
+                true
+            }
+            else->{
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     fun sendMessage(view: View) {

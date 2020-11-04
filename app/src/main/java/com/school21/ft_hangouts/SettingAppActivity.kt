@@ -27,6 +27,8 @@ class SettingAppActivity : AppCompatActivity() {
         theme.applyStyle(getSharedPreferences(ThemesInfo.themeKey,Context.MODE_PRIVATE).getInt(ThemesInfo.themeKey, ThemesInfo.defTheme), true)
         loadLocate()
         setContentView(R.layout.activity_setting_app)
+
+        MainActivity.applicationCount++
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

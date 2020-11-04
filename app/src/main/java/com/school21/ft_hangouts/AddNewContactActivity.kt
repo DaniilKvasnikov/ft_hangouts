@@ -21,6 +21,7 @@ class AddNewContactActivity : AppCompatActivity() {
         theme.applyStyle(getSharedPreferences(ThemesInfo.themeKey,Context.MODE_PRIVATE).getInt(ThemesInfo.themeKey, ThemesInfo.defTheme), true)
         setContentView(R.layout.activity_add_new_contact)
 
+        MainActivity.applicationCount++
 
         val context = this
         db = DataBaseHandler(context)

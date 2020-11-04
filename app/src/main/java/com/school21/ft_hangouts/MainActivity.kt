@@ -1,23 +1,18 @@
 package com.school21.ft_hangouts
 
-import android.Manifest
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.telephony.SmsManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 
 
 open class MainActivity : AppCompatActivity() {
@@ -27,26 +22,34 @@ open class MainActivity : AppCompatActivity() {
 
     companion object {
         var currentTheme: Int = ThemesInfo.defTheme
+        var time: Long = 0
+        var applicationCount: Int = 0
     }
 
     override fun onResume() {
         super.onResume()
         themeUpdate()
         updateUsersList()
-//        openTimeDialog()
+        openTimeDialog()
+        applicationCount = 0
+    }
+
+    override fun onPause() {
+        super.onPause()
+        time = System.currentTimeMillis() / 1000L
     }
 
     private fun openTimeDialog() {
-        val myDialogFragment = MyDialogFragment()
-        myDialogFragment.delta = 0
-        val manager = supportFragmentManager
-        myDialogFragment.show(manager, "myDialog")
+        var show: Boolean = (time != 0L && applicationCount == 0)
+        if (!show) return
+        val delta = System.currentTimeMillis() / 1000L - time
+        Toast.makeText(this, "$delta sec from last run", Toast.LENGTH_LONG).show()
     }
 
     private fun themeUpdate() {
         val newTheme = getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE)
             .getInt(ThemesInfo.themeKey, ThemesInfo.defTheme)
-        theme.applyStyle(newTheme, true )
+        theme.applyStyle(newTheme, true)
         val new = currentTheme != newTheme
         currentTheme = newTheme
         Log.i("NewTheme", "$currentTheme $newTheme $new")
@@ -55,12 +58,6 @@ open class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

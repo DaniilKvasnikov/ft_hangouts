@@ -37,6 +37,8 @@ class ContactInfoActivity : AppCompatActivity() {
         )
         setContentView(R.layout.activity_contact_info)
 
+        MainActivity.applicationCount++
+
         val context = this
         db = DataBaseHandler(context)
 

@@ -23,12 +23,15 @@ import androidx.core.content.ContextCompat
 open class MainActivity : AppCompatActivity() {
 
     private lateinit var listView: ListView
-    private var currentTheme: Int = ThemesInfo.defTheme
     private lateinit var db: DataBaseHandler
 
+    companion object {
+        var currentTheme: Int = ThemesInfo.defTheme
+    }
 
     override fun onResume() {
         super.onResume()
+        themeUpdate()
         updateUsersList()
 //        openTimeDialog()
     }
@@ -44,6 +47,13 @@ open class MainActivity : AppCompatActivity() {
         val newTheme = getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE)
             .getInt(ThemesInfo.themeKey, ThemesInfo.defTheme)
         theme.applyStyle(newTheme, true )
+        val new = currentTheme != newTheme
+        currentTheme = newTheme
+        Log.i("NewTheme", "$currentTheme $newTheme $new")
+        if (new){
+            finish()
+            startActivity(intent)
+        }
     }
 
     override fun onPause() {

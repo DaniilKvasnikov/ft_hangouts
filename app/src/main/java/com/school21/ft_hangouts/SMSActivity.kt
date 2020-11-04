@@ -1,5 +1,6 @@
 package com.school21.ft_hangouts
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 class SMSActivity : AppCompatActivity() {
     private var message: EditText? = null
     private lateinit var phoneView: TextView
+    private lateinit var nameView: TextView
 
 
     private var organization: String? = null
@@ -21,6 +23,7 @@ class SMSActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        theme.applyStyle(getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE).getInt(ThemesInfo.themeKey, ThemesInfo.defTheme), true)
         setContentView(R.layout.activity_s_m_s)
 
         id = intent.getIntExtra("id", 0).toLong()
@@ -31,8 +34,11 @@ class SMSActivity : AppCompatActivity() {
         organization = intent.getStringExtra("organization")
 
         message = findViewById(R.id.message);
-        phoneView = findViewById<TextView>(R.id.phoneNumber)
+        phoneView = findViewById(R.id.phoneNumber)
+        nameView = findViewById(R.id.nameText)
+
         phoneView.text = phone
+        nameView.text = name
     }
 
     fun sendMessage(view: View) {

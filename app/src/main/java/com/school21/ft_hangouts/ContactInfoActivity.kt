@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_new_contact.*
 import kotlinx.android.synthetic.main.activity_add_new_contact.back
 import kotlinx.android.synthetic.main.activity_contact_info.*
@@ -68,15 +69,6 @@ class ContactInfoActivity : AppCompatActivity() {
     }
 
     fun callUser(view: View) {
-        val intent = Intent(this, ContactInfoActivity::class.java).apply {
-            putExtra("id", id)
-            putExtra("name", name)
-            putExtra("surname", surname)
-            putExtra("phone", phone)
-            putExtra("organization", organization)
-            putExtra("email", email)
-        }
-        startActivity(intent)
     }
 
     fun backToMain(view: View) {
@@ -89,6 +81,14 @@ class ContactInfoActivity : AppCompatActivity() {
     }
 
     fun save(view: View) {
+        if (nameText?.text?.isEmpty()!!){
+            Toast.makeText(this, getString(R.string.EnterName), Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (phoneText?.text?.isEmpty()!!){
+            Toast.makeText(this, getString(R.string.EnterPhone), Toast.LENGTH_SHORT).show()
+            return
+        }
         var user = User()
         user.name = nameText?.text.toString()
         user.surname = surnameText?.text.toString()

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.EditText
 import kotlinx.android.synthetic.main.activity_add_new_contact.*
 import kotlinx.android.synthetic.main.activity_add_new_contact.back
@@ -12,8 +13,19 @@ import java.io.Serializable
 
 class ContactInfoActivity : MainActivity() {
 
+    private var emailText: EditText? = null
+    private var organizationText: EditText? = null
+    private var phoneText: EditText? = null
+    private var surnameText: EditText? = null
+    private var nameText: EditText? = null
     private lateinit var db: DataBaseHandler
     private var id: Long = 0
+    private var message: EditText? = null
+    private var organization: String? = null
+    private var email: String? = null
+    private var phone: String? = null
+    private var surname: String? = null
+    private var name: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,47 +36,66 @@ class ContactInfoActivity : MainActivity() {
         db = DataBaseHandler(context)
 
         id = intent.getIntExtra("id", 0).toLong()
-        val name: String? = intent.getStringExtra("name")
-        val surname: String? = intent.getStringExtra("surname")
-        val phone: String? = intent.getStringExtra("phone")
-        val email: String? = intent.getStringExtra("email")
-        val organization: String? = intent.getStringExtra("organization")
+        name = intent.getStringExtra("name")
+        surname = intent.getStringExtra("surname")
+        phone = intent.getStringExtra("phone")
+        email = intent.getStringExtra("email")
+        organization = intent.getStringExtra("organization")
 
-        val nameText : EditText = findViewById(R.id.name)
-        val surnameText : EditText = findViewById(R.id.surname)
-        val phoneText : EditText = findViewById(R.id.phone)
-        val organizationText : EditText = findViewById(R.id.organization)
-        val emailText : EditText = findViewById(R.id.email)
+        nameText = findViewById(R.id.name)
+        surnameText = findViewById(R.id.surname)
+        phoneText = findViewById(R.id.phone)
+        organizationText = findViewById(R.id.organization)
+        emailText = findViewById(R.id.email)
 
-        nameText.setText(name)
-        surnameText.setText(surname)
-        phoneText.setText(phone)
-        organizationText.setText(organization)
-        emailText.setText(email)
-
-        back.setOnClickListener {
-            backToMain()
-        }
-
-        save.setOnClickListener {
-            var user = User()
-            user.name = nameText.text.toString()
-            user.surname = surnameText.text.toString()
-            user.phone = phoneText.text.toString()
-            user.organization = organizationText.text.toString()
-            user.email = emailText.text.toString()
-            db.updateUser(id, user)
-            backToMain()
-        }
-
-        delete.setOnClickListener {
-            db.deleteUser(id)
-            backToMain()
-        }
+        nameText?.setText(name)
+        surnameText?.setText(surname)
+        phoneText?.setText(phone)
+        organizationText?.setText(organization)
+        emailText?.setText(email)
     }
 
-    private fun backToMain() {
-        val intent = Intent(this, MainActivity::class.java)
+    fun sendMessage(view: View) {
+        val intent = Intent(this, SMSActivity::class.java).apply {
+            putExtra("id", id)
+            putExtra("name", name)
+            putExtra("surname", surname)
+            putExtra("phone", phone)
+            putExtra("organization", organization)
+            putExtra("email", email)
+        }
         startActivity(intent)
+    }
+
+    fun callUser(view: View) {
+        val intent = Intent(this, ContactInfoActivity::class.java).apply {
+            putExtra("id", id)
+            putExtra("name", name)
+            putExtra("surname", surname)
+            putExtra("phone", phone)
+            putExtra("organization", organization)
+            putExtra("email", email)
+        }
+        startActivity(intent)
+    }
+
+    fun backToMain(view: View) {
+        finish()
+    }
+
+    fun delete(view: View) {
+        db.deleteUser(id)
+        backToMain(view)
+    }
+
+    fun save(view: View) {
+        var user = User()
+        user.name = nameText?.text.toString()
+        user.surname = surnameText?.text.toString()
+        user.phone = phoneText?.text.toString()
+        user.organization = organizationText?.text.toString()
+        user.email = emailText?.text.toString()
+        db.updateUser(id, user)
+        backToMain(view)
     }
 }

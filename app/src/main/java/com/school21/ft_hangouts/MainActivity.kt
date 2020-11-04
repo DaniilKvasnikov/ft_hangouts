@@ -1,13 +1,14 @@
 package com.school21.ft_hangouts
 
 import android.Manifest
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.telephony.SmsManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
+
 open class MainActivity : AppCompatActivity() {
 
     private var currentTimestamp: Long = 0
@@ -25,14 +27,20 @@ open class MainActivity : AppCompatActivity() {
 
 
     private val RECORD_REQUEST_CODE = 101
+
     private fun setupPermissions(): Boolean {
-        val permission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CONTACTS)
+        val permision= Manifest.permission.READ_CONTACTS
+        val permission = ContextCompat.checkSelfPermission(
+            this,
+            permision
+        )
 
         return if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.READ_CONTACTS),
-                    RECORD_REQUEST_CODE)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(permision),
+                RECORD_REQUEST_CODE
+            )
             false
         } else{
             true
@@ -41,6 +49,7 @@ open class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        return
         var afterStart = currentTimestamp == 0L
         var delta = System.currentTimeMillis()/ 1000 - currentTimestamp
         currentTimestamp = System.currentTimeMillis() / 1000
@@ -56,9 +65,15 @@ open class MainActivity : AppCompatActivity() {
         currentTimestamp = System.currentTimeMillis() / 1000
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        theme.applyStyle(getSharedPreferences(ThemesInfo.themeKey,Context.MODE_PRIVATE).getInt(ThemesInfo.themeKey, ThemesInfo.defTheme), true)
+        theme.applyStyle(
+            getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE).getInt(
+                ThemesInfo.themeKey,
+                ThemesInfo.defTheme
+            ), true
+        )
         setContentView(R.layout.activity_main)
         currentTimestamp = 0L
 
@@ -67,19 +82,26 @@ open class MainActivity : AppCompatActivity() {
         val users = dataBaseCreate()
         val listHash = showUsers(users)
 
+
         if (setupPermissions()){
-            val contactList = getContacts()
-            val phoneList = getPhones()
-            for (contact in contactList){
-                val newElem = HashMap<String, Any>()
-                newElem["Name"] = contact.name
-                newElem["Phone"] = phoneList[contact.id]?.get(0) ?: ""
-                newElem["Image"] = R.mipmap.ic_launcher
-                listHash.add(newElem)
-            }
+//            val contactList = getContacts()
+//            val phoneList = getPhones()
+//            for (contact in contactList){
+//                val newElem = HashMap<String, Any>()
+//                newElem["Name"] = contact.name
+//                newElem["Phone"] = phoneList[contact.id]?.get(0) ?: ""
+//                newElem["Image"] = R.mipmap.ic_launcher
+//                listHash.add(newElem)
+//            }
         }
 
-        val adapter = SimpleAdapter(this, listHash, R.layout.list_item, arrayOf("Name", "Phone", "Image"), intArrayOf(R.id.text1, R.id.text2, R.id.image))
+        val adapter = SimpleAdapter(
+            this, listHash, R.layout.list_item, arrayOf("Name", "Phone", "Image"), intArrayOf(
+                R.id.text1,
+                R.id.text2,
+                R.id.image
+            )
+        )
         listView.adapter = adapter
 
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -102,7 +124,7 @@ open class MainActivity : AppCompatActivity() {
         return data as ArrayList<User>
     }
 
-    private fun showUsers(users : ArrayList<User>): ArrayList<HashMap<String, Any>>{
+    private fun showUsers(users: ArrayList<User>): ArrayList<HashMap<String, Any>>{
         val listHash = ArrayList<HashMap<String, Any>>()
         for(user in users){
             val newElem = HashMap<String, Any>()
@@ -129,12 +151,12 @@ open class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
-            R.id.add->{
+            R.id.add -> {
                 val intent = Intent(this, AddNewContactActivity::class.java)
                 startActivity(intent)
                 true
             }
-            R.id.settings->{
+            R.id.settings -> {
                 val intent = Intent(this, SettingAppActivity::class.java)
                 startActivity(intent)
                 true
@@ -162,7 +184,13 @@ open class MainActivity : AppCompatActivity() {
     private fun getPhones() : HashMap<String, ArrayList<String>>{
         val contactList = HashMap<String, ArrayList<String>>()
 
-        val c: Cursor? = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null)
+        val c: Cursor? = contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            null,
+            null,
+            null
+        )
         if (c != null && c.count > 0) {
             val idIndex = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
             val phoneIndex = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)

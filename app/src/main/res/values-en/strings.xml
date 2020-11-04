@@ -14,4 +14,14 @@
     <string name="english">English</string>
     <string name="create">Create</string>
     <string name="settings">Settings</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="message">Message</string>
+    <string name="callUser">Call</string>
+    <string name="name">Name:</string>
+    <string name="email">Email:</string>
+    <string name="organization">Organization:</string>
+    <string name="phone">Phone:</string>
+    <string name="surname">Surname:</string>
+    <string name="sendSMS">Send SMS</string>
 </resources>

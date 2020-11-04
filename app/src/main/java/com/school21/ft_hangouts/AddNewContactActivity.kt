@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_add_new_contact.*
@@ -46,7 +47,6 @@ class AddNewContactActivity : MainActivity() {
     }
 
     private fun backToMain() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        finish()
     }
 }

@@ -39,8 +39,7 @@ class SettingAppActivity : MainActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.back->{
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+                finish()
                 true
             }
             else->{

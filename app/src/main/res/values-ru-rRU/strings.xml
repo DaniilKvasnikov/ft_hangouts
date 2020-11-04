@@ -14,4 +14,14 @@
     <string name="userimage">КартинкаПользователя</string>
     <string name="create">Добавить</string>
     <string name="settings">Настройки</string>
+    <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
+    <string name="message">Сообщение</string>
+    <string name="callUser">Звонок</string>
+    <string name="name">Имя:</string>
+    <string name="email">Email:</string>
+    <string name="organization">Организация:</string>
+    <string name="phone">Телефон:</string>
+    <string name="surname">Фамилия:</string>
+    <string name="sendSMS">Отправить сообщение</string>
 </resources>

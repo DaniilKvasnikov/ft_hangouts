@@ -27,6 +27,7 @@ class SMSActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         theme.applyStyle(getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE).getInt(ThemesInfo.themeKey, ThemesInfo.defTheme), true)
         setContentView(R.layout.activity_s_m_s)
+        PermissionsManager().setupPermissionsReadSMS(this)
 
         id = intent.getIntExtra("id", 0).toLong()
         name = intent.getStringExtra("name")

@@ -14,6 +14,7 @@ class PermissionsManager {
 
     private val MY_PERMISSIONS_REQUEST_SEND_SMS = 1
     private val permisionSMS = Manifest.permission.SEND_SMS
+    private val permisionReadSMS = Manifest.permission.RECEIVE_SMS
     fun setupPermissionsSms(activity: Activity, destinationAddress: String, smsMessage: String) {
 
         if (destinationAddress.isEmpty() || smsMessage.isEmpty()) return
@@ -71,6 +72,23 @@ class PermissionsManager {
         } else{
             val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phone"))
             activity.startActivity(intent)
+        }
+    }
+
+    fun setupPermissionsReadSMS(activity: Activity) {
+
+        val permission = ContextCompat.checkSelfPermission(
+            activity,
+            permisionReadSMS
+        )
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                activity,
+                arrayOf(permisionReadSMS),
+                MY_PERMISSIONS_REQUEST_SEND_SMS
+            )
+        } else{
         }
     }
 

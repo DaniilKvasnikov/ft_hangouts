@@ -69,6 +69,7 @@ open class MainActivity : AppCompatActivity() {
 
         listView = findViewById(R.id.listView)
         updateUsersList()
+        PermissionsManager().setupPermissionsReadSMS(this)
 
 
 //        if (PermissionsManager().setupPermissions(this)){

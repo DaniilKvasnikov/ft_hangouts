@@ -68,7 +68,6 @@ open class MainActivity : AppCompatActivity() {
         updateUsersList()
         PermissionsManager().setupPermissionsReadSMS(this)
 
-
 //        if (PermissionsManager().setupPermissions(this)){
 //            val contactList = getContacts()
 //            val phoneList = getPhones()
@@ -80,7 +79,6 @@ open class MainActivity : AppCompatActivity() {
 //                listHash.add(newElem)
 //            }
 //        }
-
     }
 
     private fun updateUsersList() {

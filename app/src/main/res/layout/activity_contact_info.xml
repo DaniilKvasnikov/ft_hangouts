@@ -6,15 +6,17 @@
         android:layout_height="match_parent"
         tools:context=".ContactInfoActivity">
 
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="MissingConstraints">
     <LinearLayout android:orientation="vertical"
-                  android:layout_width="0dp"
+                  android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   tools:ignore="MissingConstraints" android:id="@+id/linearLayout"
                   app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
                   app:layout_constraintEnd_toEndOf="parent">
-        <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="match_parent">
             <TextView android:text="@string/name"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -26,9 +28,8 @@
                       android:layout_alignParentEnd="true" android:layout_marginEnd="0dp"
                       android:layout_toEndOf="@+id/textView2" android:layout_marginStart="0dp"/>
         </RelativeLayout>
-        <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="match_parent">
             <TextView android:text="@string/surname"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -41,9 +42,8 @@
                       android:layout_alignParentEnd="true" android:layout_marginEnd="0dp"
                       android:layout_toEndOf="@+id/textView3" android:layout_marginStart="0dp"/>
         </RelativeLayout>
-        <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="match_parent">
             <TextView android:text="@string/phone"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -56,9 +56,8 @@
                       android:layout_alignParentEnd="true" android:layout_marginEnd="0dp"
                       android:layout_toEndOf="@+id/textView4" android:layout_marginStart="0dp"/>
         </RelativeLayout>
-        <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="match_parent">
             <TextView android:text="@string/organization"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -71,9 +70,8 @@
                       android:layout_alignParentEnd="true" android:layout_marginEnd="0dp"
                       android:layout_toEndOf="@+id/textView5" android:layout_marginStart="0dp"/>
         </RelativeLayout>
-        <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="match_parent">
             <TextView android:text="@string/email"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -86,29 +84,37 @@
                       android:layout_alignParentEnd="true" android:layout_marginEnd="0dp"
                       android:layout_toEndOf="@+id/textView6" android:layout_marginStart="0dp"/>
         </RelativeLayout>
-        <GridLayout android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-            <Button android:id="@+id/delete"
-                    android:layout_width="wrap_content"
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/delete"
-                    android:onClick="delete"/>
-            <Button android:id="@+id/save"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/save"
-                    android:onClick="save"/>
-            <Button android:id="@+id/message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/message"
-                    android:onClick="sendMessage"/>
-            <Button android:id="@+id/call"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/callUser"
-                    android:onClick="callUser"/>
-        </GridLayout>
-    </LinearLayout>
+                    android:layout_row="1" android:layout_column="4">
 
+                <Button android:id="@+id/delete"
+                        android:layout_width="0dp"
+                        android:layout_weight=".25"
+                        android:layout_height="wrap_content"
+                        android:text="@string/delete"
+                        android:onClick="delete"/>
+                <Button android:id="@+id/save"
+                        android:layout_width="0dp"
+                        android:layout_weight=".25"
+                        android:layout_height="wrap_content"
+                        android:text="@string/save"
+                        android:onClick="save"/>
+                <Button android:id="@+id/message"
+                        android:layout_width="0dp"
+                        android:layout_weight=".25"
+                        android:layout_height="wrap_content"
+                        android:text="@string/message"
+                        android:onClick="sendMessage"/>
+                <Button android:id="@+id/call"
+                        android:layout_width="0dp"
+                        android:layout_weight=".25"
+                        android:layout_height="wrap_content"
+                        android:text="@string/callUser"
+                        android:onClick="callUser"/>
+            </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

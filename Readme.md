@@ -1,0 +1,1 @@
+adb emu sms send 5551234 Hello Android

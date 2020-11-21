@@ -42,8 +42,15 @@ open class MainActivity : AppCompatActivity() {
     private fun openTimeDialog() {
         var show: Boolean = (time != 0L && applicationCount == 0)
         if (!show) return
-        val delta = System.currentTimeMillis() / 1000L - time
-        Toast.makeText(this, "$delta sec from last run", Toast.LENGTH_LONG).show()
+        var timeStr = convertSecondsToHMmSs(time)
+        Toast.makeText(this, "$timeStr last run", Toast.LENGTH_LONG).show()
+    }
+
+    fun convertSecondsToHMmSs(seconds: Long): String? {
+        val s = seconds % 60
+        val m = seconds / 60 % 60
+        val h = seconds / (60 * 60) % 24
+        return String.format("%d:%02d:%02d", h, m, s)
     }
 
     private fun themeUpdate() {

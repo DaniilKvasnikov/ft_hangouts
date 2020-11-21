@@ -1,35 +1,37 @@
-package com.school21.ft_hangouts;
+package com.school21.ft_hangouts
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.telephony.SmsMessage;
-import android.widget.Toast;
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.telephony.SmsMessage
+import android.widget.Toast
 
-public class SmsListener extends BroadcastReceiver {
-
-    private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(SMS_RECEIVED)) {
-            Bundle bundle = intent.getExtras();
+@Suppress("DEPRECATION")
+class SmsListener : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == SMS_RECEIVED) {
+            val bundle = intent.extras
             if (bundle != null) {
-                Object[] pdus = (Object[]) bundle.get("pdus");
-                if (pdus.length == 0) {
-                    return;
+                val pdus = bundle["pdus"] as Array<Any>?
+                if (pdus!!.isEmpty()) {
+                    return
                 }
-                SmsMessage[] messages = new SmsMessage[pdus.length];
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < pdus.length; i++) {
-                    messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
-                    sb.append(messages[i].getMessageBody());
+                val messages = arrayOfNulls<SmsMessage>(
+                    pdus.size
+                )
+                val sb = StringBuilder()
+                for (i in pdus.indices) {
+                    messages[i] = SmsMessage.createFromPdu(pdus[i] as ByteArray)
+                    sb.append(messages[i]?.messageBody)
                 }
-                String sender = messages[0].getOriginatingAddress();
-                String message = sb.toString();
-                Toast.makeText(context, sender + ": " + message, Toast.LENGTH_LONG ).show();
+                val sender = messages[0]!!.originatingAddress
+                val message = sb.toString()
+                Toast.makeText(context, "$sender: $message", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    companion object {
+        private const val SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED"
     }
 }

@@ -1,16 +1,35 @@
 package com.school21.ft_hangouts
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.school21.ft_hangouts.sms.Message
+import com.school21.ft_hangouts.sms.MessageListAdapter
+import com.school21.ft_hangouts.sms.SMSDataBaseHandler
+
+internal class Message {
+    var message: String? = null
+    var sender: User? = null
+    var createdAt: Long = 0
+}
 
 class SMSActivity : AppCompatActivity() {
+
+    companion object {
+        var intent: SMSActivity? = null
+    }
+
+
+    private lateinit var users: java.util.ArrayList<Message>
+    private lateinit var adapter: MessageListAdapter
     private var message: EditText? = null
     private lateinit var phoneView: TextView
     private lateinit var nameView: TextView
@@ -22,12 +41,23 @@ class SMSActivity : AppCompatActivity() {
     private var surname: String? = null
     private var name: String? = null
     private var id: Long = 0
+    private lateinit var recyclerView: RecyclerView
+
+    private lateinit var db: SMSDataBaseHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        theme.applyStyle(getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE).getInt(ThemesInfo.themeKey, ThemesInfo.defTheme), true)
+        theme.applyStyle(
+            getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE).getInt(
+                ThemesInfo.themeKey,
+                ThemesInfo.defTheme
+            ), true
+        )
         setContentView(R.layout.activity_s_m_s)
         PermissionsManager().setupPermissionsReadSMS(this)
+        SMSActivity.intent = this
+
+        users = dataBaseCreate()
 
         id = intent.getIntExtra("id", 0).toLong()
         name = intent.getStringExtra("name")
@@ -36,12 +66,35 @@ class SMSActivity : AppCompatActivity() {
         email = intent.getStringExtra("email")
         organization = intent.getStringExtra("organization")
 
-        message = findViewById(R.id.message);
+        message = findViewById(R.id.edittext_chatbox);
         phoneView = findViewById(R.id.phoneNumber)
         nameView = findViewById(R.id.nameText)
 
         phoneView.text = phone
         nameView.text = name
+
+        recyclerView = findViewById(R.id.recyclerView)
+
+        adapter = MessageListAdapter(users)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.scrollToPosition(adapter.messages.count() - 1)
+    }
+
+    override fun onDestroy() {
+        SMSActivity.intent = null
+        super.onDestroy()
+    }
+
+    private fun getMessages(): ArrayList<Message> {
+        val data = db.readData(phone.toString())
+        return data as ArrayList<Message>
+    }
+
+    private fun dataBaseCreate(): ArrayList<Message> {
+        val context = this
+        db = SMSDataBaseHandler(context)
+        return getMessages()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -53,7 +106,7 @@ class SMSActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
-            R.id.back->{
+            R.id.back -> {
                 finish()
                 true
             }
@@ -64,10 +117,23 @@ class SMSActivity : AppCompatActivity() {
     }
 
     fun sendMessage(view: View) {
+        val newMessage = com.school21.ft_hangouts.sms.Message()
+        newMessage.message = message?.text.toString()
+        newMessage.sender = phone.toString()
+        newMessage.createdAt = System.currentTimeMillis() / 1000L
+        newMessage.input = false
+        db.insertData(newMessage)
+        addMessage(newMessage)
         PermissionsManager().setupPermissionsSms(this, phone.toString(), message?.text.toString());
+        Toast.makeText(this, message?.text.toString(), Toast.LENGTH_LONG).show()
     }
 
     fun backToMain(view: View) {
         finish()
+    }
+
+    fun addMessage(newMessage: Message) {
+        adapter.addMessage(newMessage)
+        recyclerView.scrollToPosition(adapter.messages.count() - 1)
     }
 }

@@ -1,14 +1,22 @@
 package com.school21.ft_hangouts
 
+import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.telephony.SmsMessage
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.school21.ft_hangouts.sms.Message
+import com.school21.ft_hangouts.sms.SMSDataBaseHandler
+
 
 @Suppress("DEPRECATION")
 class SmsListener : BroadcastReceiver() {
+    private lateinit var db: SMSDataBaseHandler
+
     override fun onReceive(context: Context, intent: Intent) {
+        db = SMSDataBaseHandler(context)
         if (intent.action == SMS_RECEIVED) {
             val bundle = intent.extras
             if (bundle != null) {
@@ -26,7 +34,13 @@ class SmsListener : BroadcastReceiver() {
                 }
                 val sender = messages[0]!!.originatingAddress
                 val message = sb.toString()
-                Toast.makeText(context, "$sender: $message", Toast.LENGTH_LONG).show()
+                var newMessage = Message()
+                newMessage.message = message
+                newMessage.sender = sender
+                newMessage.createdAt = System.currentTimeMillis() / 1000L
+                newMessage.input = true
+                db.insertData(newMessage)
+                SMSActivity.intent?.addMessage(newMessage)
             }
         }
     }

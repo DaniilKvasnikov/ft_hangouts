@@ -95,7 +95,7 @@ class SMSActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.back -> {
-                finish()
+                Finish()
                 true
             }
             else->{
@@ -118,7 +118,7 @@ class SMSActivity : BaseActivity() {
     }
 
     fun backToMain(view: View) {
-        finish()
+        Finish()
     }
 
     fun addMessage(newMessage: Message) {

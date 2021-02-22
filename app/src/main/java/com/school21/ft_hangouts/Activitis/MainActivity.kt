@@ -36,26 +36,11 @@ open class MainActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         updateUsersList()
-        openTimeDialog()
     }
 
     override fun onPause() {
         super.onPause()
         time = System.currentTimeMillis() / 1000L
-    }
-
-    private fun openTimeDialog() {
-        var show: Boolean = (time != 0L)
-        if (!show) return
-        var timeStr = convertSecondsToHMmSs(time)
-        Toast.makeText(this, "$timeStr last run", Toast.LENGTH_LONG).show()
-    }
-
-    private fun convertSecondsToHMmSs(seconds: Long): String? {
-        val s = seconds % 60
-        val m = seconds / 60 % 60
-        val h = seconds / (60 * 60) % 24
-        return String.format("%d:%02d:%02d", h, m, s)
     }
 
     fun loadUsersPhone(){
@@ -96,7 +81,7 @@ open class MainActivity : BaseActivity() {
                 putExtra("organization", user.organization)
                 putExtra("email", user.email)
             }
-            startActivity(intent)
+            OpenActivity(intent)
         }
     }
 
@@ -134,14 +119,14 @@ open class MainActivity : BaseActivity() {
         return when(item.itemId){
             R.id.add -> {
                 val intent = Intent(this, AddNewContactActivity::class.java)
-                startActivity(intent)
+                OpenActivity(intent)
                 true
             }
             R.id.settings -> {
+                Finish()
                 val intent = Intent(this, SettingAppActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                startActivity(intent)
-                finish()
+                OpenActivity(intent)
                 true
             }
             else->{

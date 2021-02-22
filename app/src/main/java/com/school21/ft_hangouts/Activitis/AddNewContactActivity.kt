@@ -32,7 +32,7 @@ class AddNewContactActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.back ->{
-                finish()
+                Finish()
                 true
             }
             else->{
@@ -46,7 +46,7 @@ class AddNewContactActivity : BaseActivity() {
             Toast.makeText(this, getString(R.string.EnterName), Toast.LENGTH_SHORT).show()
             return
         }
-        if (phone.text.isEmpty() || !PhoneNumberUtils.isGlobalPhoneNumber(phone.text.toString())){
+        if (phone.text.isEmpty() || !PhoneNumberUtils.isWellFormedSmsAddress(phone.text.toString())){
             Toast.makeText(this, getString(R.string.EnterPhone), Toast.LENGTH_SHORT).show()
             return
         }
@@ -58,6 +58,6 @@ class AddNewContactActivity : BaseActivity() {
         user.email = email.text.toString()
         Log.i(TAG, "add $user")
         db.insertData(user)
-        finish()
+        Finish()
     }
 }

@@ -63,7 +63,7 @@ class ContactInfoActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.back ->{
-                finish()
+                Finish()
                 true
             }
             else->{
@@ -81,7 +81,7 @@ class ContactInfoActivity : BaseActivity() {
             putExtra("organization", organization)
             putExtra("email", email)
         }
-        startActivity(intent)
+        OpenActivity(intent)
     }
 
     fun callUser(view: View) {
@@ -90,7 +90,7 @@ class ContactInfoActivity : BaseActivity() {
     }
 
     fun backToMain(view: View) {
-        finish()
+        Finish()
     }
 
     fun delete(view: View) {
@@ -103,7 +103,7 @@ class ContactInfoActivity : BaseActivity() {
             Toast.makeText(this, getString(R.string.EnterName), Toast.LENGTH_SHORT).show()
             return
         }
-        if (phoneText!!.text.isEmpty() ||  !PhoneNumberUtils.isGlobalPhoneNumber(phoneText!!.text.toString())){
+        if (phoneText!!.text.isEmpty() ||  !PhoneNumberUtils.isWellFormedSmsAddress(phoneText!!.text.toString())){
             Toast.makeText(this, getString(R.string.EnterPhone), Toast.LENGTH_SHORT).show()
             return
         }

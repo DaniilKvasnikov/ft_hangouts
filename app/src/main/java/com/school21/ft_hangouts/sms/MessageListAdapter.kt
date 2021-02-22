@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.school21.ft_hangouts.Activitis.BaseActivity
 import com.school21.ft_hangouts.R
 
 open class MessageListAdapter(var messages: List<Message>) :
@@ -39,21 +40,14 @@ open class MessageListAdapter(var messages: List<Message>) :
         when (holder.itemViewType){
             VIEW_TYPE_MESSAGE_SENT -> {
                 holder.message?.text = messages[position].message
-                holder.time?.text = convertSecondsToHMmSs(messages[position].createdAt)
+                holder.time?.text = BaseActivity.convertSecondsToHMmSs(messages[position].createdAt)
             }
             VIEW_TYPE_MESSAGE_RECEIVED -> {
                 holder.name?.text = messages[position].sender
                 holder.message?.text = messages[position].message
-                holder.time?.text = convertSecondsToHMmSs(messages[position].createdAt)
+                holder.time?.text = BaseActivity.convertSecondsToHMmSs(messages[position].createdAt)
             }
         }
-    }
-
-
-    fun convertSecondsToHMmSs(seconds: Long): String? {
-        val m = seconds / 60 % 60
-        val h = seconds / (60 * 60) % 24
-        return String.format("%d:%02d", h, m)
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

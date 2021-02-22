@@ -1,5 +1,6 @@
 package com.school21.ft_hangouts.Activitis
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,11 +11,22 @@ import androidx.appcompat.app.AppCompatActivity
 import com.school21.ft_hangouts.LocateSetter
 import com.school21.ft_hangouts.R
 import com.school21.ft_hangouts.ThemesInfo
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 open class BaseActivity : AppCompatActivity() {
 
     companion object {
         var activitis: Long = 0
+
+        @SuppressLint("SimpleDateFormat")
+        fun convertSecondsToHMmSs(millis: Long): String? {
+            val formatter = SimpleDateFormat("HH:mm:ss");
+            val dateString = formatter.format(Date(millis))
+            return dateString
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,15 +47,8 @@ open class BaseActivity : AppCompatActivity() {
         Log.v("OpenLVL", "index = $activitis")
         var show: Boolean = (MainActivity.time != 0L)
         if (!show) return
-        var timeStr = convertSecondsToHMmSs(MainActivity.time)
+        var timeStr = BaseActivity.convertSecondsToHMmSs(MainActivity.time)
         Toast.makeText(this, "$timeStr last run", Toast.LENGTH_LONG).show()
-    }
-
-    private fun convertSecondsToHMmSs(seconds: Long): String? {
-        val s = seconds % 60
-        val m = seconds / 60 % 60
-        val h = seconds / (60 * 60) % 24
-        return String.format("%d:%02d:%02d", h, m, s)
     }
 
     fun changeTheme(view: View){

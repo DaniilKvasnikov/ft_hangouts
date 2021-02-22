@@ -1,6 +1,7 @@
 package com.school21.ft_hangouts.Activitis
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,6 +15,7 @@ import com.school21.ft_hangouts.R
 import com.school21.ft_hangouts.sms.Message
 import com.school21.ft_hangouts.sms.MessageListAdapter
 import com.school21.ft_hangouts.sms.SMSDataBaseHandler
+import java.util.concurrent.TimeUnit
 
 class SMSActivity : BaseActivity() {
 
@@ -106,19 +108,17 @@ class SMSActivity : BaseActivity() {
 
     fun sendMessage(view: View) {
         val newMessage = Message()
+        val time = System.currentTimeMillis()
         newMessage.message = message?.text.toString()
         newMessage.sender = phone.toString()
-        newMessage.createdAt = System.currentTimeMillis() / 1000L
+        newMessage.createdAt = time
         newMessage.input = false
+        Log.v("Time push", convertSecondsToHMmSs(time).toString())
         db.insertData(newMessage)
         addMessage(newMessage)
         PermissionsManager()
             .setupPermissionsSms(this, phone.toString(), message?.text.toString());
         Toast.makeText(this, message?.text.toString(), Toast.LENGTH_LONG).show()
-    }
-
-    fun backToMain(view: View) {
-        Finish()
     }
 
     fun addMessage(newMessage: Message) {

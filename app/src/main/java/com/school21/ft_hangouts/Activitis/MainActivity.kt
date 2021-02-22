@@ -4,6 +4,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView
@@ -40,7 +41,9 @@ open class MainActivity : BaseActivity() {
 
     override fun onPause() {
         super.onPause()
-        time = System.currentTimeMillis() / 1000L
+        MainActivity.time = System.currentTimeMillis()
+        val timeStr = convertSecondsToHMmSs(System.currentTimeMillis())
+        Log.v("onPause", timeStr.toString())
     }
 
     fun loadUsersPhone(){

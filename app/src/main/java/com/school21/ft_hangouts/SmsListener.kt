@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.telephony.SmsMessage
+import android.util.Log
 import com.school21.ft_hangouts.Activitis.SMSActivity
 import com.school21.ft_hangouts.sms.Message
 import com.school21.ft_hangouts.sms.SMSDataBaseHandler
@@ -33,9 +34,10 @@ class SmsListener : BroadcastReceiver() {
                 val sender = messages[0]!!.originatingAddress
                 val message = sb.toString()
                 var newMessage = Message()
+                var time = System.currentTimeMillis()
                 newMessage.message = message
                 newMessage.sender = sender
-                newMessage.createdAt = System.currentTimeMillis() / 1000L
+                newMessage.createdAt = time
                 newMessage.input = true
                 db.insertData(newMessage)
                 SMSActivity.intent?.addMessage(newMessage)

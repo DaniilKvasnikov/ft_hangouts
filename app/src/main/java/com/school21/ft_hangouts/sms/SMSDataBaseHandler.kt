@@ -17,16 +17,18 @@ var COL_MESSAGE : String = "message"
 
 class SMSDataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASENAME, null,1) {
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTable = "CREATE TABLE ${TABLENAME} (" +
-                "${COL_ID} INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "${COL_TIME} VARCHAR(256)," +
-                "${COL_TARGET} VARCHAR(256)," +
-                "${COL_INPUT} VARCHAR(256)," +
-                "${COL_MESSAGE} VARCHAR(256))"
+        val createTable = "CREATE TABLE $TABLENAME (" +
+                "$COL_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "$COL_TIME VARCHAR(256)," +
+                "$COL_TARGET VARCHAR(256)," +
+                "$COL_INPUT VARCHAR(256)," +
+                "$COL_MESSAGE VARCHAR(256))"
         db?.execSQL(createTable)
     }
+
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
     }
+
     fun insertData(message: Message) {
         val database = this.writableDatabase
         val contentValues = GetContentValues(message)
@@ -47,7 +49,7 @@ class SMSDataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATAB
     fun readData(phone: String): MutableList<Message> {
         val list: MutableList<Message> = ArrayList()
         val db = this.readableDatabase
-        val query = "Select * from ${TABLENAME}"
+        val query = "Select * from $TABLENAME where $COL_TARGET = '$phone'"
         val result = db.rawQuery(query, null)
         if (result.moveToFirst()) {
             do {
@@ -66,11 +68,11 @@ class SMSDataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATAB
     fun updateMessage(id: Long, message: Message) {
         val db = this.writableDatabase
         val cv = GetContentValues(message)
-        db.update(TABLENAME, cv, "${COL_ID} = ?", arrayOf(id.toString()))
+        db.update(TABLENAME, cv, "$COL_ID = ?", arrayOf(id.toString()))
     }
 
     fun deleteMessage(id: Long){
         val db = this.writableDatabase
-        db.delete(TABLENAME, "${COL_ID} = ?", arrayOf(id.toString()));
+        db.delete(TABLENAME, "$COL_ID = ?", arrayOf(id.toString()));
     }
 }

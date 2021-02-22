@@ -1,30 +1,25 @@
-package com.school21.ft_hangouts
+package com.school21.ft_hangouts.Activitis
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.telephony.PhoneNumberUtils
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
+import com.school21.ft_hangouts.*
 import kotlinx.android.synthetic.main.activity_add_new_contact.*
 
-class AddNewContactActivity : AppCompatActivity() {
+class AddNewContactActivity : BaseActivity() {
 
     private lateinit var db: DataBaseHandler
 
     private val TAG = "PermissionDemo"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        theme.applyStyle(getSharedPreferences(ThemesInfo.themeKey,Context.MODE_PRIVATE).getInt(ThemesInfo.themeKey, ThemesInfo.defTheme), true)
         setContentView(R.layout.activity_add_new_contact)
 
-        MainActivity.applicationCount++
-
-        val context = this
-        db = DataBaseHandler(context)
+        db = DataBaseHandler(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -36,7 +31,7 @@ class AddNewContactActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
-            R.id.back->{
+            R.id.back ->{
                 finish()
                 true
             }
@@ -47,11 +42,11 @@ class AddNewContactActivity : AppCompatActivity() {
     }
 
     fun addNewUser(view: View) {
-        if (name.text.isEmpty()){
+        if (name.text.trim().isEmpty()){
             Toast.makeText(this, getString(R.string.EnterName), Toast.LENGTH_SHORT).show()
             return
         }
-        if (phone.text.isEmpty()){
+        if (phone.text.isEmpty() || !PhoneNumberUtils.isGlobalPhoneNumber(phone.text.toString())){
             Toast.makeText(this, getString(R.string.EnterPhone), Toast.LENGTH_SHORT).show()
             return
         }

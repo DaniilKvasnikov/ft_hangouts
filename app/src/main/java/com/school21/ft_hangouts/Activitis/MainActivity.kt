@@ -1,37 +1,42 @@
-package com.school21.ft_hangouts
+package com.school21.ft_hangouts.Activitis
 
-import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.school21.ft_hangouts.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
-open class MainActivity : AppCompatActivity() {
+open class MainActivity : BaseActivity() {
 
     private lateinit var listView: ListView
     private lateinit var db: DataBaseHandler
 
     companion object {
-        var currentTheme: Int = ThemesInfo.defTheme
         var time: Long = 0
-        var applicationCount: Int = 0
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        listView = findViewById(R.id.listView)
+        updateUsersList()
+        PermissionsManager().setupPermissionsReadSMS(this)
     }
 
     override fun onResume() {
         super.onResume()
-        themeUpdate()
         updateUsersList()
         openTimeDialog()
-        applicationCount = 0
     }
 
     override fun onPause() {
@@ -40,41 +45,20 @@ open class MainActivity : AppCompatActivity() {
     }
 
     private fun openTimeDialog() {
-        var show: Boolean = (time != 0L && applicationCount == 0)
+        var show: Boolean = (time != 0L)
         if (!show) return
         var timeStr = convertSecondsToHMmSs(time)
         Toast.makeText(this, "$timeStr last run", Toast.LENGTH_LONG).show()
     }
 
-    fun convertSecondsToHMmSs(seconds: Long): String? {
+    private fun convertSecondsToHMmSs(seconds: Long): String? {
         val s = seconds % 60
         val m = seconds / 60 % 60
         val h = seconds / (60 * 60) % 24
         return String.format("%d:%02d:%02d", h, m, s)
     }
 
-    private fun themeUpdate() {
-        val newTheme = getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE)
-            .getInt(ThemesInfo.themeKey, ThemesInfo.defTheme)
-        theme.applyStyle(newTheme, true)
-        val new = currentTheme != newTheme
-        currentTheme = newTheme
-        Log.i("NewTheme", "$currentTheme $newTheme $new")
-        if (new){
-            finish()
-            startActivity(intent)
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        themeUpdate()
-        setContentView(R.layout.activity_main)
-
-        listView = findViewById(R.id.listView)
-        updateUsersList()
-        PermissionsManager().setupPermissionsReadSMS(this)
-
+    fun loadUsersPhone(){
 //        if (PermissionsManager().setupPermissions(this)){
 //            val contactList = getContacts()
 //            val phoneList = getPhones()
@@ -93,8 +77,11 @@ open class MainActivity : AppCompatActivity() {
         val listHash = showUsers(users)
 
         val adapter = SimpleAdapter(
-            this, listHash, R.layout.list_item, arrayOf("Name", "Phone", "Image"), intArrayOf(
-                R.id.text1, R.id.text2, R.id.image
+            this, listHash,
+            R.layout.list_item, arrayOf("Name", "Phone", "Image"), intArrayOf(
+                R.id.text1,
+                R.id.text2,
+                R.id.image
             )
         )
         listView.adapter = adapter
@@ -152,7 +139,9 @@ open class MainActivity : AppCompatActivity() {
             }
             R.id.settings -> {
                 val intent = Intent(this, SettingAppActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
                 startActivity(intent)
+                finish()
                 true
             }
             else->{
@@ -169,7 +158,13 @@ open class MainActivity : AppCompatActivity() {
             val nameIndex = c?.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
             val idIndex = c?.getColumnIndex(ContactsContract.Contacts._ID)
             while (c?.moveToNext()!!)
-                contactList.add(Contact(c.getString(nameIndex!!), c.getString(idIndex!!)))
+                contactList.add(
+                    Contact(
+                        c.getString(
+                            nameIndex!!
+                        ), c.getString(idIndex!!)
+                    )
+                )
         }
         c?.close()
         return contactList

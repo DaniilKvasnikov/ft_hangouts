@@ -1,6 +1,5 @@
-package com.school21.ft_hangouts
+package com.school21.ft_hangouts.Activitis
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,20 +7,15 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.school21.ft_hangouts.PermissionsManager
+import com.school21.ft_hangouts.R
 import com.school21.ft_hangouts.sms.Message
 import com.school21.ft_hangouts.sms.MessageListAdapter
 import com.school21.ft_hangouts.sms.SMSDataBaseHandler
 
-internal class Message {
-    var message: String? = null
-    var sender: User? = null
-    var createdAt: Long = 0
-}
-
-class SMSActivity : AppCompatActivity() {
+class SMSActivity : BaseActivity() {
 
     companion object {
         var intent: SMSActivity? = null
@@ -47,17 +41,9 @@ class SMSActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        theme.applyStyle(
-            getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE).getInt(
-                ThemesInfo.themeKey,
-                ThemesInfo.defTheme
-            ), true
-        )
         setContentView(R.layout.activity_s_m_s)
         PermissionsManager().setupPermissionsReadSMS(this)
-        SMSActivity.intent = this
-
-        users = dataBaseCreate()
+        Companion.intent = this
 
         id = intent.getIntExtra("id", 0).toLong()
         name = intent.getStringExtra("name")
@@ -75,6 +61,8 @@ class SMSActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
 
+        users = dataBaseCreate()
+
         adapter = MessageListAdapter(users)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -82,7 +70,7 @@ class SMSActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        SMSActivity.intent = null
+        Companion.intent = null
         super.onDestroy()
     }
 
@@ -117,14 +105,15 @@ class SMSActivity : AppCompatActivity() {
     }
 
     fun sendMessage(view: View) {
-        val newMessage = com.school21.ft_hangouts.sms.Message()
+        val newMessage = Message()
         newMessage.message = message?.text.toString()
         newMessage.sender = phone.toString()
         newMessage.createdAt = System.currentTimeMillis() / 1000L
         newMessage.input = false
         db.insertData(newMessage)
         addMessage(newMessage)
-        PermissionsManager().setupPermissionsSms(this, phone.toString(), message?.text.toString());
+        PermissionsManager()
+            .setupPermissionsSms(this, phone.toString(), message?.text.toString());
         Toast.makeText(this, message?.text.toString(), Toast.LENGTH_LONG).show()
     }
 

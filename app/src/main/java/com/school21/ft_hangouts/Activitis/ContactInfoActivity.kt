@@ -1,17 +1,17 @@
-package com.school21.ft_hangouts
+package com.school21.ft_hangouts.Activitis
 
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.telephony.PhoneNumberUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.school21.ft_hangouts.*
+import kotlinx.android.synthetic.main.activity_add_new_contact.*
 
-class ContactInfoActivity : AppCompatActivity() {
+class ContactInfoActivity : BaseActivity() {
 
     private var emailText: EditText? = null
     private var organizationText: EditText? = null
@@ -29,18 +29,9 @@ class ContactInfoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        theme.applyStyle(
-            getSharedPreferences(ThemesInfo.themeKey, Context.MODE_PRIVATE).getInt(
-                ThemesInfo.themeKey,
-                ThemesInfo.defTheme
-            ), true
-        )
         setContentView(R.layout.activity_contact_info)
 
-        MainActivity.applicationCount++
-
-        val context = this
-        db = DataBaseHandler(context)
+        db = DataBaseHandler(this)
 
         id = intent.getIntExtra("id", 0).toLong()
         name = intent.getStringExtra("name")
@@ -71,7 +62,7 @@ class ContactInfoActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
-            R.id.back->{
+            R.id.back ->{
                 finish()
                 true
             }
@@ -94,7 +85,8 @@ class ContactInfoActivity : AppCompatActivity() {
     }
 
     fun callUser(view: View) {
-        PermissionsManager().setupPermissionsCall(this, phone.toString(), message?.text.toString());
+        PermissionsManager()
+            .setupPermissionsCall(this, phone.toString(), message?.text.toString());
     }
 
     fun backToMain(view: View) {
@@ -107,15 +99,15 @@ class ContactInfoActivity : AppCompatActivity() {
     }
 
     fun save(view: View) {
-        if (nameText?.text?.isEmpty()!!){
+        if (nameText!!.text.trim().isEmpty()){
             Toast.makeText(this, getString(R.string.EnterName), Toast.LENGTH_SHORT).show()
             return
         }
-        if (phoneText?.text?.isEmpty()!!){
+        if (phoneText!!.text.isEmpty() ||  !PhoneNumberUtils.isGlobalPhoneNumber(phoneText!!.text.toString())){
             Toast.makeText(this, getString(R.string.EnterPhone), Toast.LENGTH_SHORT).show()
             return
         }
-        var user = User()
+        val user = User()
         user.name = nameText?.text.toString()
         user.surname = surnameText?.text.toString()
         user.phone = phoneText?.text.toString()
